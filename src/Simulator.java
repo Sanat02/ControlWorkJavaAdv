@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 public class Simulator {
     private List<Cat> listOfCats;
-    private List<String> catNumberList = new ArrayList<>();
 
     public void run() {
         Scanner in = new Scanner(System.in);
@@ -20,7 +19,6 @@ public class Simulator {
         Printer.print(listOfCats);
         System.out.println();
         int action = 1;
-        List<String> numberList = new ArrayList<>();
         while (action != 5) {
             action = printAction();
             performAction(action);
@@ -29,6 +27,7 @@ public class Simulator {
         listOfCats.forEach(Cat::nextDay);
         System.out.println("Изменились характеристики котов");
         System.out.println();
+        sortByAvgReversed();
         Printer.print(listOfCats);
 
     }
@@ -127,26 +126,28 @@ public class Simulator {
 
         switch (num) {
             case 1:
-                System.out.println(catNumberList);
-                if (!catNumberList.isEmpty() && catNumberList.contains(String.valueOf(integerCatNumber))) {
+                if (listOfCats.get(integerCatNumber - 1).getIsActed() == 1) {
                     System.out.println("Повторение....Характеристики не поменялись");
-                    System.out.printf("Вы кормили кота:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
+                    System.out.printf("Вы уже делали действие над котом:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
                 } else {
                     listOfCats.get(integerCatNumber - 1).feed();
+                    listOfCats.get(integerCatNumber - 1).setIsActed(1);
                 }
                 break;
             case 2:
-                if (!catNumberList.isEmpty() && catNumberList.contains(String.valueOf(integerCatNumber))) {
+                if (listOfCats.get(integerCatNumber - 1).getIsActed() == 1) {
                     System.out.println("Повторение....Характеристики не поменялись");
-                    System.out.printf("Вы играли с котом:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
+                    System.out.printf("Вы уже делали действие над котом:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
                 } else {
                     listOfCats.get(integerCatNumber - 1).play();
+                    listOfCats.get(integerCatNumber - 1).setIsActed(1);
                 }
                 break;
             case 3:
-                if (!catNumberList.isEmpty() && catNumberList.contains(String.valueOf(integerCatNumber))) {
+                if (listOfCats.get(integerCatNumber - 1).getIsActed() == 1) {
                     System.out.println("Повторение....Характеристики не поменялись");
-                    System.out.printf("Вы  лечили кота:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
+                    System.out.printf("Вы уже делали действие над котом:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
+                    listOfCats.get(integerCatNumber - 1).setIsActed(1);
                 } else {
                     listOfCats.get(integerCatNumber - 1).treat();
                 }
@@ -157,8 +158,6 @@ public class Simulator {
                 System.out.println("Вы добавили нового кота!");
                 break;
         }
-        catNumberList.add(String.valueOf(integerCatNumber));
         sortByAvgReversed();
-
     }
 }

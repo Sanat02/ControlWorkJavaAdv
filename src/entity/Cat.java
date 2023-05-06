@@ -9,6 +9,7 @@ public class Cat {
     private int mood;
     private int satiety;
     private int avgLevel;
+    private int isActed;
 
 
     public Cat(String name, int age, int startNum, int endNum) {
@@ -18,7 +19,12 @@ public class Cat {
         this.mood = rnd(endNum) + startNum;
         this.satiety = rnd(endNum) + startNum;
         this.avgLevel = (health + mood + satiety) / 3;
+        isActed=0;
 
+    }
+
+    public int getIsActed() {
+        return isActed;
     }
 
     public int getAvgLevel() {
@@ -45,6 +51,10 @@ public class Cat {
         return satiety;
     }
 
+    public void setIsActed(int isActed) {
+        this.isActed = isActed;
+    }
+
     public void feed() {
         System.out.printf("Вы кормите кота:%s ,возраст:%s%n", name, age);
         if (age >= 1 && age <= 5) {
@@ -60,6 +70,7 @@ public class Cat {
         satiety=Math.min(100,satiety);
         mood=Math.min(100,mood);
         avgLevel = (health + mood + satiety) / 3;
+
     }
 
     public void treat() {
@@ -81,6 +92,7 @@ public class Cat {
         mood = Math.max(0, mood);
         satiety = Math.max(0, satiety);
         avgLevel = (health + mood + satiety) / 3;
+
     }
 
     public void play() {
