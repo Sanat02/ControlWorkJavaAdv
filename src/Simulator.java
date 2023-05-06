@@ -180,9 +180,10 @@ public class Simulator {
                 if (listOfCats.get(integerCatNumber - 1).getIsActed() == 1) {
                     System.out.println("Повторение....Характеристики не поменялись");
                     System.out.printf("Вы уже делали действие над котом:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
-                    listOfCats.get(integerCatNumber - 1).setIsActed(1);
+
                 } else {
                     listOfCats.get(integerCatNumber - 1).treat();
+                    listOfCats.get(integerCatNumber - 1).setIsActed(1);
                 }
                 break;
             case 4:
