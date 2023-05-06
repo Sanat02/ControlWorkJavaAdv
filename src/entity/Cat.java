@@ -3,8 +3,8 @@ package entity;
 import static utilities.Rnd.rnd;
 
 public class Cat {
-    private String name;
-    private int age;
+    private final String name;
+    private final int age;
     private int health;
     private int mood;
     private int satiety;
