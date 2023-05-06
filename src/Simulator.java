@@ -14,16 +14,14 @@ public class Simulator {
         Scanner in = new Scanner(System.in);
         listOfCats = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            addCat(0,101);
+            addCat(0, 101);
         }
         Printer.print(listOfCats);
         System.out.println();
-//        System.out.println("..............Добавление нового кота..............");
-//        addCat(0,81);
-//        Printer.print(listOfCats);
-        printAction();
-
-
+        int action = printAction();
+        performAction(action);
+        System.out.println();
+        Printer.print(listOfCats);
 
     }
 
@@ -43,8 +41,14 @@ public class Simulator {
         Scanner in = new Scanner(System.in);
         System.out.println("Введите возраст кота:");
         String value = in.nextLine();
+        value = isNumeric(value);
+        return value;
+    }
+
+    private String isNumeric(String value) {
+        Scanner in = new Scanner(System.in);
         while (value.isEmpty()) {
-            System.out.println("Пустое знчение!Введите возраст кота:");
+            System.out.println("Пустое знчение!Введите заново");
             value = in.nextLine();
         }
         boolean isvalid = returnValidNumber(value);
@@ -68,20 +72,68 @@ public class Simulator {
     private void sortByAvgReversed() {
         listOfCats = listOfCats.stream().sorted(Comparator.comparing(Cat::getAvgLevel).reversed()).collect(Collectors.toList());
     }
-    private void addCat(int startNum,int endNum)
-    {
+
+    private void addCat(int startNum, int endNum) {
         String name = retrieveName();
         int age = Integer.parseInt(retrieveAge());
-        while(age>18||age<0)
-        {
+        while (age > 18 || age < 0) {
             System.out.println("Неправильный возраст!");
             age = Integer.parseInt(retrieveAge());
         }
-        listOfCats.add(new Cat(name, age,startNum,endNum));
+        listOfCats.add(new Cat(name, age, startNum, endNum));
         sortByAvgReversed();
     }
-    private void printAction()
-    {
-        System.out.printf("%s%n1.%s%n2.%s%n3.%s%n4.%s%n","Доступные действия","Кормить кота","Играть с котом","Лечить кота","Добавить кота");
+
+    private int printAction() {
+        Scanner in = new Scanner(System.in);
+        System.out.printf("%s%n1.%s%n2.%s%n3.%s%n4.%s%n", "Доступные действия", "Кормить кота", "Играть с котом", "Лечить кота", "Добавить кота");
+        String command = in.nextLine();
+        command = isNumeric(command);
+        int num = Integer.parseInt(command);
+        while (num > 4 || num < 1) {
+            System.out.println("Неправильный номер действия!");
+            command = in.nextLine();
+            command = isNumeric(command);
+            num = Integer.parseInt(command);
+        }
+
+        return num;
+    }
+
+    private void performAction(int num) {
+        int integerCatNumber=0;
+        if(num!=4) {
+            Printer.print(listOfCats);
+            Scanner in = new Scanner(System.in);
+            System.out.println("Введите номер кота:");
+            String catNumber = in.nextLine();
+            catNumber = isNumeric(catNumber);
+             integerCatNumber = Integer.parseInt(catNumber);
+            while (integerCatNumber > listOfCats.size() || integerCatNumber < 1) {
+                System.out.println("Неправильный номер кота!");
+                catNumber = in.nextLine();
+                catNumber = isNumeric(catNumber);
+                integerCatNumber = Integer.parseInt(catNumber);
+            }
+        }
+        switch (num) {
+            case 1:
+                System.out.printf("Вы покормили кота:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
+                break;
+            case 2:
+                System.out.printf("Вы поиграли с котом:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
+                break;
+            case 3:
+                System.out.printf("Вы вылечили с кота:%s ,возраст:%s%n", listOfCats.get(integerCatNumber - 1).getName(), listOfCats.get(integerCatNumber - 1).getAge());
+                break;
+            case 4:
+                System.out.println("----------Добавление нового кота----------");
+                addCat(20, 81);
+                System.out.println("Вы добавили нового кота!");
+                break;
+            default:
+                System.out.println("ERROR!");
+                break;
+        }
     }
 }
