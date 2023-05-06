@@ -10,12 +10,13 @@ public class Cat {
     private int satiety;
     private int avgLevel;
 
-    public Cat(String name, int age) {
+
+    public Cat(String name, int age,int startNum,int endNum) {
         this.name = name;
         this.age = age;
-        this.health = rnd(101) + 0;
-        this.mood =rnd(101) + 0;
-        this.satiety = rnd(101) + 0;
+        this.health = rnd(endNum) + startNum;
+        this.mood =rnd(endNum) + startNum;
+        this.satiety = rnd(endNum) + startNum;
         this.avgLevel=(health+mood+satiety)/3;
 
     }
