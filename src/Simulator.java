@@ -1,10 +1,7 @@
 import entity.Cat;
 import entity.Printer;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Simulator {
@@ -16,19 +13,54 @@ public class Simulator {
         for (int i = 0; i < 3; i++) {
             addCat(0, 101);
         }
-        Printer.print(listOfCats);
-        System.out.println();
-        int action = 1;
-        while (action != 5) {
-            action = printAction();
-            performAction(action);
+        String continueNextDay = "y";
+        while (continueNextDay.equals("y") && !listOfCats.isEmpty()) {
+            Printer.print(listOfCats);
+            System.out.println();
+            int action = 1;
+            while (action != 5) {
+                action = printAction();
+                performAction(action);
+                for (int i = 0; i < listOfCats.size(); i++) {
+                    if (listOfCats.get(i).getIsAlive() == 1) {
+                        System.out.printf("Кот %s умер.%n", listOfCats.get(i).getHealth());
+                        listOfCats.remove(i);
+                    }
+                }
+
+            }
+            System.out.println("----------Следующий день----------");
+            listOfCats.forEach(o -> o.setIsActed(0));
+            listOfCats.forEach(Cat::nextDay);
+            System.out.println("Изменились характеристики котов");
+            System.out.println();
+            sortByAvgReversed();
+            Printer.print(listOfCats);
+            System.out.println("Введите букву y если хотите продолжить этот день");
+            continueNextDay = in.nextLine().toLowerCase(Locale.ROOT);
         }
-        System.out.println("----------Следующий день----------");
-        listOfCats.forEach(Cat::nextDay);
-        System.out.println("Изменились характеристики котов");
-        System.out.println();
-        sortByAvgReversed();
-        Printer.print(listOfCats);
+        System.out.println("-------------------Конец симуляции-------------------");
+        if (!listOfCats.isEmpty()) {
+            String continueSort = "y";
+            System.out.println("Ваш окончательный список:");
+            Printer.print(listOfCats);
+            while (continueSort.equals("y")) {
+                System.out.printf("Сортировать по:%na)%s%nb)%s%nc)%s%nd)%s%ne)%s%nf)%s%n", "имени", "возрасту", "здоровью", "настроению", "сытости", "среднему уровню");
+                String option = in.nextLine().toLowerCase(Locale.ROOT);
+                while (!option.equals("a") && !option.equals("b") && !option.equals("c") && !option.equals("e") && !option.equals("f")) {
+                    System.out.println("Неправильно ввели значение.Введите заново!");
+                    option = in.nextLine().toLowerCase(Locale.ROOT);
+                }
+                makeSort(option);
+                System.out.println("Результат сортировки:");
+                Printer.print(listOfCats);
+                System.out.println("Введите букву y если хотите продолжить этот день");
+                continueSort = in.nextLine().toLowerCase(Locale.ROOT);
+
+            }
+        } else {
+            System.out.println("У вас не осталось котов!");
+        }
 
     }
 
@@ -132,6 +164,7 @@ public class Simulator {
                 } else {
                     listOfCats.get(integerCatNumber - 1).feed();
                     listOfCats.get(integerCatNumber - 1).setIsActed(1);
+
                 }
                 break;
             case 2:
@@ -159,5 +192,55 @@ public class Simulator {
                 break;
         }
         sortByAvgReversed();
+    }
+
+    private void sortByName() {
+        listOfCats = listOfCats.stream().sorted(Comparator.comparing(Cat::getName)).toList();
+    }
+
+    private void sortByAge() {
+        listOfCats = listOfCats.stream().sorted(Comparator.comparing(Cat::getAge)).toList();
+    }
+
+    private void sortByMood() {
+        listOfCats = listOfCats.stream().sorted(Comparator.comparing(Cat::getMood)).toList();
+    }
+
+    private void sortBySatiety() {
+        listOfCats = listOfCats.stream().sorted(Comparator.comparing(Cat::getSatiety)).toList();
+    }
+
+    private void sortByAvgLevel() {
+        listOfCats = listOfCats.stream().sorted(Comparator.comparing(Cat::getAvgLevel)).toList();
+    }
+
+    private void sortByHealth() {
+        listOfCats = listOfCats.stream().sorted(Comparator.comparing(Cat::getHealth)).toList();
+    }
+
+    private void makeSort(String option) {
+        switch (option) {
+            case "a":
+                sortByName();
+                break;
+            case "b":
+                sortByAge();
+                break;
+            case "c":
+                sortByHealth();
+                break;
+            case "d":
+                sortByMood();
+                break;
+            case "e":
+                sortBySatiety();
+                break;
+            case "f":
+                sortByAvgLevel();
+                break;
+            default:
+                System.out.println("Sorting error!");
+                break;
+        }
     }
 }

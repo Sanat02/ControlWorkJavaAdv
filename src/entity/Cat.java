@@ -10,6 +10,7 @@ public class Cat {
     private int satiety;
     private int avgLevel;
     private int isActed;
+    private int isAlive;
 
 
     public Cat(String name, int age, int startNum, int endNum) {
@@ -19,7 +20,8 @@ public class Cat {
         this.mood = rnd(endNum) + startNum;
         this.satiety = rnd(endNum) + startNum;
         this.avgLevel = (health + mood + satiety) / 3;
-        isActed=0;
+        isActed = 0;
+        isAlive = 0;
 
     }
 
@@ -57,19 +59,27 @@ public class Cat {
 
     public void feed() {
         System.out.printf("Вы кормите кота:%s ,возраст:%s%n", name, age);
-        if (age >= 1 && age <= 5) {
-            satiety += 7;
-            mood += 7;
-        } else if (age >= 6 && age <= 10) {
-            satiety += 5;
-            mood += 5;
+        if (rnd(10) <= 2) {
+            System.out.println("Отравление кота.........");
+            badAccident();
+            mood = Math.max(0, mood);
+            health = Math.max(0, health);
+            avgLevel = (health + mood + satiety) / 3;
         } else {
-            satiety += 4;
-            mood += 4;
+            if (age >= 1 && age <= 5) {
+                satiety += 7;
+                mood += 7;
+            } else if (age >= 6 && age <= 10) {
+                satiety += 5;
+                mood += 5;
+            } else {
+                satiety += 4;
+                mood += 4;
+            }
+            satiety = Math.min(100, satiety);
+            mood = Math.min(100, mood);
+            avgLevel = (health + mood + satiety) / 3;
         }
-        satiety=Math.min(100,satiety);
-        mood=Math.min(100,mood);
-        avgLevel = (health + mood + satiety) / 3;
 
     }
 
@@ -96,52 +106,68 @@ public class Cat {
     }
 
     public void play() {
-        System.out.printf("Вы играете с котом:%s ,возраст:%s%n", name, age);
-        if (age >= 1 && age <= 5) {
-            mood += 7;
-            health += 7;
-            satiety -= 3;
-        } else if (age >= 6 && age <= 10) {
-            mood += 5;
-            health += 5;
-            satiety -= 5;
+        if (rnd(10) <= 2) {
+            System.out.println("Травмирование кота.........");
+            badAccident();
+            mood = Math.max(0, mood);
+            health = Math.max(0, health);
+            avgLevel = (health + mood + satiety) / 3;
         } else {
-            mood += 4;
-            health += 5;
-            satiety -= 6;
+            System.out.printf("Вы играете с котом:%s ,возраст:%s%n", name, age);
+            if (age >= 1 && age <= 5) {
+                mood += 7;
+                health += 7;
+                satiety -= 3;
+            } else if (age >= 6 && age <= 10) {
+                mood += 5;
+                health += 5;
+                satiety -= 5;
+            } else {
+                mood += 4;
+                health += 5;
+                satiety -= 6;
+            }
         }
         mood = Math.min(100, mood);
         health = Math.min(100, health);
         satiety = Math.max(0, satiety);
         avgLevel = (health + mood + satiety) / 3;
     }
-    public void nextDay()
-    {
-        int r1=rnd(4)+(-3);
-        int r2=rnd(4)+(-3);
-        satiety-=rnd(6)+1;
-        mood+=r1;
-        health+=r2;
 
-        satiety=Math.max(0,satiety);
-        if(r1>=0)
-        {
-            mood=Math.min(100,mood);
+    public void nextDay() {
+        int r1 = rnd(4) + (-3);
+        int r2 = rnd(4) + (-3);
+        satiety -= rnd(6) + 1;
+        mood += r1;
+        health += r2;
+
+        satiety = Math.max(0, satiety);
+        if (r1 >= 0) {
+            mood = Math.min(100, mood);
+        } else {
+            mood = Math.max(0, mood);
         }
-        else
-        {
-            mood=Math.max(0,mood);
-        }
-        if(r2>=0)
-        {
-            health=Math.min(100,health);
-        }
-        else
-        {
-            health=Math.max(0,health);
+        if (r2 >= 0) {
+            health = Math.min(100, health);
+        } else {
+            health = Math.max(0, health);
         }
         avgLevel = (health + mood + satiety) / 3;
 
+    }
+
+    private void badAccident() {
+        mood -= 30;
+        health -= 30;
+    }
+
+    public int getIsAlive() {
+        if (health == 0) {
+            isAlive = 1;
+        } else {
+            isAlive = 0;
+        }
+        return isAlive;
     }
 
 }
